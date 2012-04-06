@@ -1,0 +1,26 @@
+{
+  "author": "Nikita Volkov <nikita.y.volkov@mail.ru> (http://www.flipart.ru)",
+  "name": "RobustaTest",
+  "description": "",
+  "keywords": ["testing", "library", "robusta", "coffeescript"],
+  "version": "0.1.0",
+  "homepage": null,
+  "repository": {
+    "type": "git",
+    "url": null
+  },
+  "main": "lib/RobustaTest.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jasmine-node spec --coffee"
+  },
+  "dependencies": {
+    "Fuell": "0.1.2",
+    "FuellSys": "0.1.0"
+  },
+  "devDependencies": {
+    "jasmine-node": "1.0.x"
+  }
+}
