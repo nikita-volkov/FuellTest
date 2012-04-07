@@ -40,18 +40,6 @@ run = (suite, testsDeclaration) ->
         suite: suite
         error: e
 
-###
-Fuell testing library.
-
-Makes testing simple. It does not fall into the trend of verbosely describing every detail of your test as most modern testing frameworks do, instead it relies on self-describing assertion function names which themselves produce meaningful messages.
-
-As fast as possible. Runs all your tests parallelly.
-
-Supports testing of asynchronous functions with callbacks.
-
-###
-
-
 
 exports.runTestSuites = 
 runTestSuites = (suiteByNameMap, cb) ->

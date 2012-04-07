@@ -1,7 +1,7 @@
 {
   "author": "Nikita Volkov <nikita.y.volkov@mail.ru> (http://www.flipart.ru)",
   "name": "RobustaTest",
-  "description": "",
+  "description": "A robust testing library which simplifies testing features after implementation",
   "keywords": ["testing", "library", "robusta", "coffeescript"],
   "version": "0.1.0",
   "homepage": null,
@@ -21,6 +21,6 @@
     "FuellSys": "0.1.0"
   },
   "devDependencies": {
-    "jasmine-node": "1.0.x"
+    "jasmine-node": "1.0.20"
   }
 }
