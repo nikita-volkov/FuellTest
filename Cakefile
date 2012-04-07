@@ -1,7 +1,7 @@
 {exec} = require 'child_process'
 
 task "run", "", ->
-  compile -> npmInstall -> run "lib/Main.js", ->
+  compile -> npmInstall -> run "lib/Main.js"
 
 npmInstall = (cb) ->
   exec1 "npm install", cb
@@ -13,9 +13,12 @@ run = (file, cb) ->
   exec1 "node #{file}", cb
 
 exec1 = (cmd, cb) ->
-  exec cmd, (err, stdout, stderr) ->
-    if err 
-      console.error err.stack
-    else if stdout || stderr
-      console.log stdout + stderr 
+  exec cmd, (error, stdout, stderr) ->
+    if error 
+      console.error error.stack
+    else 
+      if stdout && !/^(\r|\n|\r\n)$/.test(stdout)
+        console.log stdout
+      if stderr
+        console.log stderr 
       cb?()
