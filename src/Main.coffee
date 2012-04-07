@@ -1,17 +1,22 @@
-{Action, Actions, Array, Arrays, Environment, Function, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, SortedArray, String, Strings} = require "./FueL"
-{Path, Environment} = require "./FueLSys"
-HOFU  = require "./HOFU"
-FS    = require "fs"
-CP    = require "child_process"
+{Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
+
+Test = require "./RobustaTest/Test"
 
 
-# Robusta = require "./Robusta"
+someAction = (cb) ->
+  setTimeout(
+    -> cb 5
+    100
+  )
+test = ->
+  @equals 3, 4
+  @equals 3, 5
+  @equals 5, 5
+  @resultEquals 5, someAction
+  @resultEquals 6, someAction
+  @resultEquals 6, someAction
+  @resultEquals 7, someAction
 
-# Robusta.build(
-#   ["clean", "build:compressed-bundle"]
-#   "sample-project"
-#   -> console.log "DONE"
-# )
 
-
-require "./FueLDocTest/Comment/TestsText"
+Test.run test, (summary) ->
+  console.log summary
