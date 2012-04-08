@@ -45,14 +45,15 @@ binaryResultAssertion = (partialMsg, predicate) ->
 
 
 class TestExecutionContext
-  failures: []
+  constructor: ->
+    @failures = []
+    @assertions = 0
+    @openAsyncCalls = 0
 
-  assertions: 0
   assert: (condition, msg) ->
     @assertions++
     if not condition then @failures.push msg
 
-  openAsyncCalls: 0
   allAsyncCallsClosedCallback: ->
   assertAsync: 
     Function.composable (predicate, action, partialMessage, timeout = 100) ->
