@@ -12,13 +12,15 @@ run = (f, cb) ->
 
   cb1 = ->
     cb 
-      assertions: tec.assertions
-      failures: tec.failures
+      total: tec.assertions
+      passed: tec.assertions - tec.failures.length
+      messages: tec.failures
       time: Date.now() - startTime
 
   if tec.openAsyncCalls > 0 
     tec.allAsyncCallsClosedCallback = cb1
-  else cb1()
+  else 
+    cb1()
 
   return
 
