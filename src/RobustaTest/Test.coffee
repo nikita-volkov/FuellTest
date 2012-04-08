@@ -12,8 +12,8 @@ run = (f, cb) ->
 
   cb1 = ->
     cb 
-      total: tec.assertions
-      passed: tec.assertions - tec.failures.length
+      assertionsRun: tec.assertions
+      assertionsPassed: tec.assertions - tec.failures.length
       messages: tec.failures
       time: Date.now() - startTime
 

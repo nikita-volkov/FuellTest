@@ -8,7 +8,8 @@ text = (useFormatting, summary) ->
 
   testSummaryText = (summary) ->
     Strings.interlayedUnion "\n", [
-      "#{green}#{summary.assertionsPassed} of #{summary.assertions} assertions passed#{normal}"
+      "Spent #{summary.time}ms"
+      "#{green}#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed#{normal}"
       
       if !Array.empty summary.messages
         Strings.union [
@@ -21,34 +22,44 @@ text = (useFormatting, summary) ->
 
   suiteSummaryText = (summary) ->
     Strings.interlayedUnion "\n", [
-      "#{green}#{summary.testsPassed} of #{summary.tests} tests passed#{normal}"
-      if !Array.empty summary.failedTestByNamePairs
-        "Failed tests:\n" +
+      "Spent #{summary.time}ms"
+      "#{green}#{summary.testsPassed} of #{summary.testsRun} tests passed#{normal}"
+      "#{green}#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed#{normal}"
+
+      if !Array.empty summary.failedTestSummaryByNamePairs
+        "Failed tests summaries:\n" +
         Text.indented 2, Strings.multilineText do ->
-          for [name, summary] in summary.failedTestByNamePairs
-            "Test `#{name}` summary\n" +
+          for [name, summary] in summary.failedTestSummaryByNamePairs
+            "Test `#{name}`\n" +
             Text.indented 2, testSummaryText summary
     ]
 
   Strings.interlayedUnion "\n", [
-    "#{green}#{summary.suitesPassed} of #{summary.suites} suites passed#{normal}"
-    if !Array.empty summary.failedSuiteByNamePairs
-      "Failed suites:\n" +
+    "Spent #{summary.time}ms"
+    "#{green}#{summary.suitesPassed} of #{summary.suitesRun} suites passed#{normal}"
+    "#{green}#{summary.testsPassed} of #{summary.testsRun} tests passed#{normal}"
+    "#{green}#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed#{normal}"
+    if !Array.empty summary.failedSuiteSummaryByNamePairs
+      "Failed suites summaries:\n" +
       Text.indented 2, Strings.multilineText do ->
-        for [name, summary] in summary.failedSuiteByNamePairs
-          "Suite `#{name}` summary\n" +
+        for [name, summary] in summary.failedSuiteSummaryByNamePairs
+          "Suite `#{name}`\n" +
           Text.indented 2, suiteSummaryText summary
   ]
 
+
 # console.log text false, 
+#   time: 1000
 #   suites: 1
 #   suitesPassed: 0
 #   failedSuiteByNamePairs: [
 #     ["suite 1", {
+#       time: 10
 #       tests: 2
 #       testsPassed: 1
 #       failedTestByNamePairs: [
 #         ["test 1", {
+#           time: 1
 #           assertions: 1
 #           assertionsPassed: 1
 #           messages: [
