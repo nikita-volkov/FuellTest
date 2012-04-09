@@ -2,9 +2,9 @@
 
 exports.text = 
 text = (useFormatting, summary) ->
-  green   = if useFormatting then "\\033[32m" else ""
-  red     = if useFormatting then "\\033[31m" else ""
-  normal  = if useFormatting then "\\033[0m" else ""
+  green   = if useFormatting then '\x1B[32m' else ""
+  red     = if useFormatting then "\x1B[31m" else ""
+  normal  = if useFormatting then "\x1B[0m" else ""
 
   testSummaryText = (summary) ->
     Strings.interlayedUnion "\n", [
