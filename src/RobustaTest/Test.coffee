@@ -1,8 +1,9 @@
+{Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
 
 exports.run = 
 run = (f, cb) ->
   ###
-  Calls the function with a new test execution context, summarizing the results and passing them to the callback.
+  Calls the function with a new test execution context, summarizing the results and passing them to the callback. 
   ###
 
   tec = new TestExecutionContext
@@ -11,28 +12,77 @@ run = (f, cb) ->
 
   cb1 = ->
     cb 
-      # failedStatusByMessageMap: {}
-      assertions: tec.assertions
-      failures: tec.failures
+      assertionsRun: tec.assertions
+      assertionsPassed: tec.assertions - tec.failures.length
+      messages: tec.failures
       time: Date.now() - startTime
 
   if tec.openAsyncCalls > 0 
     tec.allAsyncCallsClosedCallback = cb1
-  else cb1()
+  else 
+    cb1()
 
   return
-  # if tec.passed + tec.failed == tec.assertions then cb1()
-  # else tec.assertionCloseCallback = cb1
+
+
+
+
+
+unaryAssertion = (partialMsg, predicate) ->
+  (x) -> @assert (predicate x), "`#{x}` #{partialMsg}"
+
+binaryAssertion = (partialMsg, predicate) ->
+  (y, x) -> @assert (predicate y, x), "`#{x}` #{partialMsg} `#{y}`"
+
+unaryResultAssertion = (partialMsg, predicate) ->
+  (action, timeout) ->
+    @assertAsync predicate, action, partialMsg, timeout
+
+binaryResultAssertion = (partialMsg, predicate) ->
+  (y, action, timeout) ->
+    @assertAsync [predicate, y], action, "#{partialMsg} `#{y}`", timeout
+
 
 
 class TestExecutionContext
-  assertions: 0
-  failures: []
-  todo: -> 
-    @failures.push "TODO"
+  constructor: ->
+    @failures = []
+    @assertions = 0
+    @openAsyncCalls = 0
+
   assert: (condition, msg) ->
     @assertions++
     if not condition then @failures.push msg
+
+  allAsyncCallsClosedCallback: ->
+  assertAsync: 
+    Function.composable (predicate, action, partialMessage, timeout = 100) ->
+      @assertions++
+      @openAsyncCalls++
+
+
+      closeAsyncCall = =>
+        @openAsyncCalls--
+        if @openAsyncCalls == 0 then @allAsyncCallsClosedCallback()
+        else if @openAsyncCalls < 0 then throw "Unexpected async call closure"
+
+      calledBack = false
+      timedOut = false
+      action (x) =>
+        if not timedOut
+          calledBack = true
+          if not predicate x
+            @failures.push "Action result `#{x}` #{partialMessage}"
+          closeAsyncCall()
+      setTimeout(
+        =>
+          if not calledBack
+            timedOut = true
+            @failures.push "Action has not called back in #{timeout}ms"
+            closeAsyncCall()
+        timeout
+      )
+
   ok: (x) ->
     @assert x, "`#{x}` is not ok"
   empty: (x) ->
@@ -41,18 +91,20 @@ class TestExecutionContext
     @assert x == true, "`#{x}` is not true"
   isNull: (x) ->
     @assert !x?, "`#{x}` is not null"
-  equals: (expected, actual) ->
-    @assert (Object.equals expected, actual), "`#{actual}` does not equal `#{expected}`"
+  equals: (y, x) ->
+    @assert (Object.equals y, x), "`#{x}` does not equal `#{y}`"
   contains: (y, x) ->
     @assert (Array.contains y, x), "`#{x}` does not contain `#{y}`"
   elementOf: (y, x) ->
     @assert (Array.elementOf y, x), "`#{x}` is not an element of `#{y}`"
-  partOf: (y, x) ->
-    @assert (Array.partOf y, x), "`#{x}` is not a part of `#{y}`"
   includes: (y, x) ->
     @assert (Array.includes y, x), "`#{x}` does not include `#{y}`"
+  partOf: (y, x) ->
+    @assert (Array.partOf y, x), "`#{x}` is not a part of `#{y}`"
   instanceOf: (y, x) ->
     @assert (Object.instanceOf y, x), "`#{x}` is not an instance of `#{y}`"
+  todo: -> 
+    @assert false, "TODO"
   fails: (f) ->
     @assert(
       do ->
@@ -65,81 +117,23 @@ class TestExecutionContext
     )
 
   callsBackIn: (msecs, action) ->
-    @openAsyncCall()
-    Action.checkCallsBackIn msecs, action, (result) -> 
-      @assert result, "Action does not call back in #{msecs}ms"
-      @closeAsyncCall()
+    @assertAsync (-> true), action, "", msecs
 
-  
-  # resultEquals: (expected, action) ->
-  #   @expectResultTo [Object.equals, expected], action, "does not equal `#{expected}`"
+  resultIsOk: 
+    unaryResultAssertion "is not ok", Object.self
+  resultIsEmpty: 
+    unaryResultAssertion "is not empty", Object.empty
+  resultIsNull:
+    unaryResultAssertion "is not null", Object.isNull
   resultEquals: 
-    resultBinaryAssertion "does not equal", Object.equals
+    binaryResultAssertion "does not equal", Object.equals
   resultContains: 
-    resultBinaryAssertion "does not contain", Array.contains
-  # resultEquals: (y, action) ->
-  #   assertResult [Object.equals, y], action, "does not equal"
-
-
-
-
-  allAsyncCallsClosedCallback: ->
-  openAsyncCalls: 0
-  openAsyncCall: ->
-    @openAsyncCalls ++
-  closeAsyncCall: ->
-    @openAsyncCalls --
-    if @openAsyncCalls == 0 then @allAsyncCallsClosedCallback()
-    else if @openAsyncCalls < 0 then throw "Unexpected async call closure"
-
-
-functionFails = (f) ->
-  try
-    f()
-    false
-  catch e
-    true
-    
-
-unaryAssertion = (partialMsg, predicate) ->
-  (x) -> assert (predicate x), "`#{x}` #{partialMsg}"
-
-binaryAssertion = (partialMsg, predicate) ->
-  (y, x) -> assert (predicate y, x), "`#{x}` #{partialMsg} `#{y}`"
-
-assert = (condition, msg) ->
-  @assertions ++
-  if not condition
-    @failures.push msg
-
-
-resultUnaryAssertion = (partialMsg, predicate) ->
-  (action) ->
-    assertResult predicate, partialMsg, action
-
-resultBinaryAssertion = (partialMsg, predicate) ->
-  (y, action) ->
-    assertResult [predicate, y], "#{partialMsg} `#{y}`", action
-
-assertResult = Function.composable (predicate, partialMsg, action) ->
-  @assertions++
-
-  calledBack = false
-  timedOut = false
-  @openAsyncCall()
-  action (x) -> 
-    if not timedOut
-      calledBack = true
-      if not predicate x
-        @failures.push "Action result `#{x}` #{partialMsg}"
-      @closeAsyncCall()
-  setTimeout(
-    ->
-      if not calledBack
-        timedOut = true
-        @failures.push "Action has not called back in 10s"
-        @closeAsyncCall()
-    10000
-  )
-
-
+    binaryResultAssertion "does not contain", Array.contains
+  resultIsElementOf:
+    binaryResultAssertion "is not an element of", Object.elementOf
+  resultIncludes:
+    binaryResultAssertion "does not include", Array.includes
+  resultIsPartOf:
+    binaryResultAssertion "is not a part of", Array.partOf
+  resultIsInstanceOf:
+    binaryResultAssertion "is not an instance of", Object.instanceOf
