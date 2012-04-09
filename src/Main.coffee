@@ -1,38 +1,22 @@
 {Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
 {Path} = require "FuellSys"
-# Test = require "./RobustaTest/Test"
+Runner = require "./RobustaTest/Runner"
 
 
-# someAction = (cb) ->
-#   setTimeout(
-#     -> cb 5
-#     100
-#   )
-# test = ->
-#   @equals 3, 4
-#   @equals 3, 5
-#   @equals 5, 5
-#   @resultEquals 5, someAction
-#   @resultEquals 6, someAction
-#   @resultEquals 6, someAction
-#   @resultEquals 7, someAction
+settings = do ->
+  args = Array.dropping 2, process.argv
+
+  target:
+    if args[0] && String.doesMatch /^[^-]/, args[0] then args[0]
+    else "test"
+  noFormatting:
+    Array.contains "--no-formatting", args
 
 
-# Test.run test, (summary) ->
-#   # console.log testSummaryRender true, summary
+if Path.dirExists settings.target
+  Runner.testDirectory !settings.noFormatting, settings.target, ->
+else if Path.fileExists settings.target
+  Runner.testFile !settings.noFormatting, settings.target, ->
+else
+  throw "Path `#{settings.target}` does not exist"
 
-
-
-# require "./RobustaTest/TotalSummary"
-# path = "SampleTest"
-# absPath = process.cwd() + "/test/" + path
-# relativePath = FuellSys.Path.relativeTo __filename, absPath
-# console.log require relativePath
-
-
-# require "./RobustaTest/TestByNamePairs"
-# require "./RobustaTest/SuiteByNamePairs"
-
-RobustaTest = require "./RobustaTest"
-
-RobustaTest.testDirectory "test"
