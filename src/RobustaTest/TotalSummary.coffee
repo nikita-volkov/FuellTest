@@ -2,49 +2,64 @@
 
 exports.text = 
 text = (useFormatting, summary) ->
-  green   = if useFormatting then '\x1B[32m' else ""
-  red     = if useFormatting then "\x1B[31m" else ""
-  normal  = if useFormatting then "\x1B[0m" else ""
+  reset    = if useFormatting then "\x1B[0m" else ""
+  red      = if useFormatting then "\x1B[31m" else ""
+  green    = if useFormatting then '\x1B[32m' else ""
+  yellow   = if useFormatting then "\x1B[33m" else ""
+  blue     = if useFormatting then "\x1B[34m" else ""
+  magenta  = if useFormatting then "\x1B[35m" else ""
+  cyan     = if useFormatting then "\x1B[36m" else ""
 
   testSummaryText = (summary) ->
     Strings.interlayedUnion "\n", [
       "Spent #{summary.time}ms"
-      "#{green}#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed#{normal}"
-      
+      "#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed"
       if !Array.empty summary.messages
         Strings.union [
-          red
           "Failed assertions:\n"
+          red
           Text.indented 2, Strings.multilineText summary.messages
-          normal
+          reset
         ]
     ]
 
   suiteSummaryText = (summary) ->
     Strings.interlayedUnion "\n", [
       "Spent #{summary.time}ms"
-      "#{green}#{summary.testsPassed} of #{summary.testsRun} tests passed#{normal}"
-      "#{green}#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed#{normal}"
+      "#{summary.testsPassed} of #{summary.testsRun} tests passed"
+      "#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed"
 
       if !Array.empty summary.failedTestSummaryByNamePairs
         "Failed tests summaries:\n" +
         Text.indented 2, Strings.multilineText do ->
           for [name, summary] in summary.failedTestSummaryByNamePairs
-            "Test `#{name}`\n" +
-            Text.indented 2, testSummaryText summary
+            Strings.union [
+              if summary.assertionsPassed == summary.assertionsRun then green
+              else if summary.assertionsPassed > 0 then yellow
+              else red
+              "Test `#{name}`\n"
+              Text.indented 2, testSummaryText summary
+              reset
+            ]
     ]
 
   Strings.interlayedUnion "\n", [
     "Spent #{summary.time}ms"
-    "#{green}#{summary.suitesPassed} of #{summary.suitesRun} suites passed#{normal}"
-    "#{green}#{summary.testsPassed} of #{summary.testsRun} tests passed#{normal}"
-    "#{green}#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed#{normal}"
+    "#{summary.suitesPassed} of #{summary.suitesRun} suites passed"
+    "#{summary.testsPassed} of #{summary.testsRun} tests passed"
+    "#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed"
     if !Array.empty summary.failedSuiteSummaryByNamePairs
       "Failed suites summaries:\n" +
       Text.indented 2, Strings.multilineText do ->
         for [name, summary] in summary.failedSuiteSummaryByNamePairs
-          "Suite `#{name}`\n" +
-          Text.indented 2, suiteSummaryText summary
+          Strings.union [
+            if summary.assertionsPassed == summary.assertionsRun then green
+            else if summary.assertionsPassed > 0 then yellow
+            else red
+            "Suite `#{name}`\n" +
+            Text.indented 2, suiteSummaryText summary
+            reset
+          ]
   ]
 
 
