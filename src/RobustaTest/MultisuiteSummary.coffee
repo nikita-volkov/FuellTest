@@ -16,9 +16,10 @@ text = (useFormatting, summary) ->
 
   success = summary.suitesPassed == summary.suitesRun
 
-  header  = reset + if success then green else yellow
-  normal  = reset + dimmed 
-  error   = reset + red
+  failureHeader  = reset + yellow
+  successHeader  = reset + green
+  normal         = reset + dimmed 
+  error          = reset + red
 
 
   testSummaryText = (summary) ->
@@ -41,12 +42,23 @@ text = (useFormatting, summary) ->
         "Failed tests summaries:\n" +
         Text.indented 2, Strings.multilineText do ->
           for [name, summary] in summary.failedTestSummaryByNamePairs
-            "#{header}Test `#{name}`#{normal}\n" +
-            Text.indented 2, testSummaryText summary
+            Strings.union [
+              if summary.assertionsPassed == summary.assertionsRun
+                "#{successHeader}Test `#{name}` passed\n"
+              else
+                "#{failureHeader}Test `#{name}` failed\n"
+              normal 
+              Text.indented 2, testSummaryText summary
+            ]
     ]
 
   Strings.union [
-    "#{header}Multisuite Testing Summary#{normal}\n"
+    if summary.assertionsPassed == summary.assertionsRun
+      "#{successHeader}Multisuite testing passed\n"
+    else
+      "#{failureHeader}Multisuite testing failed\n"
+    
+    normal
     Text.indented 2, Strings.interlayedUnion "\n", [
       "Spent #{summary.time}ms"
       "#{summary.suitesPassed} of #{summary.suitesRun} suites passed"
@@ -56,9 +68,16 @@ text = (useFormatting, summary) ->
         "Failed suites summaries:\n" +
         Text.indented 2, Strings.multilineText do ->
           for [name, summary] in summary.failedSuiteSummaryByNamePairs
-            "#{header}Suite `#{name}`#{normal}\n" +
-            Text.indented 2, suiteSummaryText summary
+            Strings.union [
+              if summary.assertionsPassed == summary.assertionsRun
+                "#{successHeader}Suite `#{name}` passed\n"
+              else
+                "#{failureHeader}Suite `#{name}` failed\n"
+              normal 
+              Text.indented 2, suiteSummaryText summary
+            ]
     ] 
+
     reset
   ]
 
