@@ -10,7 +10,9 @@
     "url": null
   },
   "main": "lib/RobustaTest.js",
-  "bin": "bin/robusta-test",
+  "bin": {
+    "robusta-test": "bin/robusta-test"
+  },
   "directories": {
     "lib": "lib"
   },
