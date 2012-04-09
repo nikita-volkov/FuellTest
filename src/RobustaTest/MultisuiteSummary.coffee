@@ -13,10 +13,12 @@ text = (useFormatting, summary) ->
   dimmed      = if useFormatting then "\x1B[2m" else ""
   underlined  = if useFormatting then "\x1B[4m" else ""
   inverse     = if useFormatting then "\x1B[7m" else ""
-  header      = reset 
-  normal      = reset + dimmed
-  failure     = reset + red
-  success     = reset + green
+
+  success = summary.suitesPassed == summary.suitesRun
+
+  header  = reset + if success then green else yellow
+  normal  = reset + dimmed 
+  error   = reset + red
 
 
   testSummaryText = (summary) ->
@@ -25,7 +27,7 @@ text = (useFormatting, summary) ->
       "#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed"
       if !Array.empty summary.messages
         "Failed assertions:\n" +
-        failure +
+        error +
         Text.indented 2, Strings.multilineText summary.messages
     ]
 
