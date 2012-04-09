@@ -1,7 +1,7 @@
 {Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Number, Numbers, Object, Optional, Optionals, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
 {Path, Paths, Environment} = require "FuellSys"
 Test = require "./Test"
-TotalSummary = require "./TotalSummary"
+MultisuiteSummary = require "./MultisuiteSummary"
 SuiteByNamePairs = require "./SuiteByNamePairs"
 CoffeeScript  = require 'coffee-script'
 
@@ -18,7 +18,7 @@ testDirectory = (useFormatting, path, cb) ->
       files
     )
   SuiteByNamePairs.run suiteByNamePairs, (summary) ->
-    console.log TotalSummary.text useFormatting, summary
+    console.log MultisuiteSummary.text useFormatting, summary
     cb?()
 
 exports.testFile = 
