@@ -13,10 +13,13 @@ text = (useFormatting, summary) ->
   dimmed      = if useFormatting then "\x1B[2m" else ""
   underlined  = if useFormatting then "\x1B[4m" else ""
   inverse     = if useFormatting then "\x1B[7m" else ""
-  header      = reset 
-  normal      = reset + dimmed
-  failure     = reset + red
-  success     = reset + green
+
+  success = summary.suitesPassed == summary.suitesRun
+
+  failureHeader  = reset + yellow
+  successHeader  = reset + green
+  normal         = reset + dimmed 
+  error          = reset + red
 
 
   testSummaryText = (summary) ->
@@ -25,7 +28,7 @@ text = (useFormatting, summary) ->
       "#{summary.assertionsPassed} of #{summary.assertionsRun} assertions passed"
       if !Array.empty summary.messages
         "Failed assertions:\n" +
-        failure +
+        error +
         Text.indented 2, Strings.multilineText summary.messages
     ]
 
@@ -39,12 +42,23 @@ text = (useFormatting, summary) ->
         "Failed tests summaries:\n" +
         Text.indented 2, Strings.multilineText do ->
           for [name, summary] in summary.failedTestSummaryByNamePairs
-            "#{header}Test `#{name}`#{normal}\n" +
-            Text.indented 2, testSummaryText summary
+            Strings.union [
+              if summary.assertionsPassed == summary.assertionsRun
+                "#{successHeader}Test `#{name}` passed\n"
+              else
+                "#{failureHeader}Test `#{name}` failed\n"
+              normal 
+              Text.indented 2, testSummaryText summary
+            ]
     ]
 
   Strings.union [
-    "#{header}Multisuite Testing Summary#{normal}\n"
+    if summary.assertionsPassed == summary.assertionsRun
+      "#{successHeader}Testing passed\n"
+    else
+      "#{failureHeader}Testing failed\n"
+    
+    normal
     Text.indented 2, Strings.interlayedUnion "\n", [
       "Spent #{summary.time}ms"
       "#{summary.suitesPassed} of #{summary.suitesRun} suites passed"
@@ -54,9 +68,16 @@ text = (useFormatting, summary) ->
         "Failed suites summaries:\n" +
         Text.indented 2, Strings.multilineText do ->
           for [name, summary] in summary.failedSuiteSummaryByNamePairs
-            "#{header}Suite `#{name}`#{normal}\n" +
-            Text.indented 2, suiteSummaryText summary
+            Strings.union [
+              if summary.assertionsPassed == summary.assertionsRun
+                "#{successHeader}Suite `#{name}` passed\n"
+              else
+                "#{failureHeader}Suite `#{name}` failed\n"
+              normal 
+              Text.indented 2, suiteSummaryText summary
+            ]
     ] 
+
     reset
   ]
 

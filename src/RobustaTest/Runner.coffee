@@ -30,8 +30,25 @@ fileTests = (file) ->
   Object.member "tests", coffeeScriptExports file
 
 coffeeScriptExports = (file) ->
-  CoffeeScript = require "coffee-script"
   code = Path.fileContents file
   js = CoffeeScript.compile code, {filename: file}
-  js = js + "\nreturn exports;"
-  require.main._compile js
+  jsCodeExports file, js
+
+jsCodeExports = (path, code) ->
+  ###
+  Fairly stolen from coffeescript
+  ###
+  code = code + "\nreturn exports;"
+
+  mainModule = require.main
+
+  # Set the filename.
+  mainModule.filename = path
+
+  # Clear the module cache.
+  mainModule.moduleCache and= {}
+
+  # Assign paths for node_modules loading
+  mainModule.paths = require('module')._nodeModulePaths Path.dir path
+
+  mainModule._compile code, mainModule.filename
