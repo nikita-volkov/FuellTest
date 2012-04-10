@@ -1,11 +1,17 @@
 {Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
 Runner = require "./RobustaTest/Runner"
 MultisuiteSummary = require "./RobustaTest/MultisuiteSummary"
-SuiteByNamePairs = require "./SuiteByNamePairs/Runner"
+SuiteByNamePairs = require "./RobustaTest/SuiteByNamePairs"
 
 
-exports = 
-  testDirectory          : Runner.testDirectory
-  testFile               : Runner.testFile
-  multisuiteSummaryText  : MultisuiteSummary.text
-  runTestSuites          : SuiteByNamePairs.run
+exports[k] = v for k, v of {
+  testDirectory: 
+    Runner.testDirectory
+  testFile: 
+    Runner.testFile
+  runSuites: (format, suites, cb) -> 
+    SuiteByNamePairs.run suites, (summary) -> 
+      console.log MultisuiteSummary.text format, summary
+      cb?()
+  # multisuiteSummaryText  : MultisuiteSummary.text
+}

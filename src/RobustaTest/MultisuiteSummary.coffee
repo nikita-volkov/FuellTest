@@ -54,9 +54,9 @@ text = (useFormatting, summary) ->
 
   Strings.union [
     if summary.assertionsPassed == summary.assertionsRun
-      "#{successHeader}Multisuite testing passed\n"
+      "#{successHeader}Testing passed\n"
     else
-      "#{failureHeader}Multisuite testing failed\n"
+      "#{failureHeader}Testing failed\n"
     
     normal
     Text.indented 2, Strings.interlayedUnion "\n", [
