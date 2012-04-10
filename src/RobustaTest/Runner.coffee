@@ -7,7 +7,7 @@ CoffeeScript  = require 'coffee-script'
 
 
 exports.testDirectory = 
-testDirectory = (useFormatting, path, cb) ->
+testDirectory = (pretty, path, cb) ->
   files = Paths.byExtension "coffee", Path.deepPaths path
   suiteByNamePairs = 
     Array.results(
@@ -18,11 +18,11 @@ testDirectory = (useFormatting, path, cb) ->
       files
     )
   SuiteByNamePairs.run suiteByNamePairs, (summary) ->
-    console.log MultisuiteSummary.text useFormatting, summary
+    console.log MultisuiteSummary.text pretty, summary
     cb?()
 
 exports.testFile = 
-testFile = (useFormatting, path, cb) ->
+testFile = (pretty, path, cb) ->
   throw "Unimplemented: Runner.testFile"
 
 
