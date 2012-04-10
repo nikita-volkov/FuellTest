@@ -3,7 +3,7 @@
   "name": "RobustaTest",
   "description": "A robust testing library which simplifies testing features after implementation",
   "keywords": ["testing", "library", "robusta", "coffeescript"],
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": null,
   "repository": {
     "type": "git",

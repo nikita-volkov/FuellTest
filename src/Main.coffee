@@ -9,14 +9,14 @@ settings = do ->
   target:
     if args[0] && String.doesMatch /^[^-]/, args[0] then args[0]
     else "test"
-  format:
-    Array.containsAnyOf ["--format", "-f"], args
+  pretty:
+    Array.containsAnyOf ["--pretty", "-p"], args
 
 
 if Path.dirExists settings.target
-  Runner.testDirectory settings.format, settings.target, ->
+  Runner.testDirectory settings.pretty, settings.target, ->
 else if Path.fileExists settings.target
-  Runner.testFile settings.format, settings.target, ->
+  Runner.testFile settings.pretty, settings.target, ->
 else
   throw "Path `#{settings.target}` does not exist"
 
