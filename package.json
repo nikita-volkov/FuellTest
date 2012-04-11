@@ -1,9 +1,9 @@
 {
   "author": "Nikita Volkov <nikita.y.volkov@mail.ru> (http://www.flipart.ru)",
   "name": "RobustaTest",
-  "description": "A robust testing library which simplifies testing features after implementation",
-  "keywords": ["testing", "library", "robusta", "coffeescript"],
-  "version": "0.1.2",
+  "description": "A robust testing library which simplifies testing features after implementation. Introduces simple testing model of asynchronous functions.",
+  "keywords": ["testing", "library", "simple", "async", "robusta", "coffeescript"],
+  "version": "0.2.0",
   "homepage": null,
   "repository": {
     "type": "git",

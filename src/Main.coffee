@@ -14,9 +14,9 @@ settings = do ->
 
 
 if Path.dirExists settings.target
-  Runner.testDirectory settings.pretty, settings.target, ->
+  Runner.testDirectory settings.pretty, settings.target
 else if Path.fileExists settings.target
-  Runner.testFile settings.pretty, settings.target, ->
+  Runner.testFile settings.pretty, settings.target
 else
   throw "Path `#{settings.target}` does not exist"
 
