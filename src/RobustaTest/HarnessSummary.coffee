@@ -1,18 +1,18 @@
 {Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
 
 exports.text = 
-text = (useFormatting, summary) ->
-  reset       = if useFormatting then "\x1B[0m" else ""
-  red         = if useFormatting then "\x1B[31m" else ""
-  green       = if useFormatting then '\x1B[32m' else ""
-  yellow      = if useFormatting then "\x1B[33m" else ""
-  blue        = if useFormatting then "\x1B[34m" else ""
-  magenta     = if useFormatting then "\x1B[35m" else ""
-  cyan        = if useFormatting then "\x1B[36m" else ""
-  bright      = if useFormatting then "\x1B[1m" else ""
-  dimmed      = if useFormatting then "\x1B[2m" else ""
-  underlined  = if useFormatting then "\x1B[4m" else ""
-  inverse     = if useFormatting then "\x1B[7m" else ""
+text = (pretty, name, summary) ->
+  reset       = if pretty then "\x1B[0m" else ""
+  red         = if pretty then "\x1B[31m" else ""
+  green       = if pretty then '\x1B[32m' else ""
+  yellow      = if pretty then "\x1B[33m" else ""
+  blue        = if pretty then "\x1B[34m" else ""
+  magenta     = if pretty then "\x1B[35m" else ""
+  cyan        = if pretty then "\x1B[36m" else ""
+  bright      = if pretty then "\x1B[1m" else ""
+  dimmed      = if pretty then "\x1B[2m" else ""
+  underlined  = if pretty then "\x1B[4m" else ""
+  inverse     = if pretty then "\x1B[7m" else ""
 
   success = summary.suitesPassed == summary.suitesRun
 
@@ -54,9 +54,9 @@ text = (useFormatting, summary) ->
 
   Strings.union [
     if summary.assertionsPassed == summary.assertionsRun
-      "#{successHeader}Testing passed\n"
+      "#{successHeader}Testing harness `#{name}` passed\n"
     else
-      "#{failureHeader}Testing failed\n"
+      "#{failureHeader}Testing harness `#{name}` failed\n"
     
     normal
     Text.indented 2, Strings.interlayedUnion "\n", [
