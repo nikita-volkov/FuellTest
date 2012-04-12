@@ -1,21 +1,21 @@
 {
   "author": "Nikita Volkov <nikita.y.volkov@mail.ru> (http://www.flipart.ru)",
-  "name": "RobustaTest",
+  "name": "FuellTest",
   "description": "A robust testing library which simplifies testing features after implementation. Introduces simple testing model of asynchronous functions.",
   "keywords": ["testing", "library", "simple", "async", "robusta", "coffeescript"],
-  "version": "0.2.1",
+  "version": "0.3.0",
   "homepage": null,
   "repository": {
     "type": "git",
-    "url": "http://github.com/nikita-volkov/RobustaTest"
+    "url": "http://github.com/nikita-volkov/FuellTest"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.github.com/nikita-volkov/RobustaTest/master/LICENSE"
+      "url": "https://raw.github.com/nikita-volkov/FuellTest/master/LICENSE"
     }
   ],
-  "main": "lib/RobustaTest.js",
+  "main": "lib/FuellTest.js",
   "bin": {
     "robusta-test": "bin/robusta-test"
   },
