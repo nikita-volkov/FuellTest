@@ -2,8 +2,8 @@
   "author": "Nikita Volkov <nikita.y.volkov@mail.ru> (http://www.flipart.ru)",
   "name": "FuellTest",
   "description": "A robust testing library for CoffeeScript/JavaScript which simplifies testing features after implementation and introduces simple testing model of asynchronous functions",
-  "keywords": ["testing", "library", "simple", "async", "robusta", "coffeescript"],
-  "version": "0.3.0",
+  "keywords": ["testing", "library", "simple", "async", "fuell", "coffeescript"],
+  "version": "0.3.1",
   "homepage": null,
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   ],
   "main": "lib/FuellTest.js",
   "bin": {
-    "robusta-test": "bin/robusta-test"
+    "fuell-test": "bin/fuell-test"
   },
   "directories": {
     "lib": "lib"
