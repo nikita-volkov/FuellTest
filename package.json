@@ -3,7 +3,7 @@
   "name": "FuellTest",
   "description": "A robust testing library for CoffeeScript/JavaScript which simplifies testing features after implementation and introduces simple testing model of asynchronous functions",
   "keywords": ["testing", "library", "simple", "async", "fuell", "coffeescript"],
-  "version": "0.3.1",
+  "version": "0.3.2",
   "homepage": null,
   "repository": {
     "type": "git",
