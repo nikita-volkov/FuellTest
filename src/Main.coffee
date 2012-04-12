@@ -1,6 +1,6 @@
 {Action, Actions, Array, Arrays, Environment, Function, FunctionByLengthMap, FunctionByTypesPairs, FunctionTemplate, Keys, Map, Number, Object, Optional, Pair, Pairs, RegExp, Set, SortedArray, String, Strings, Text} = require "Fuell"
 {Path} = require "FuellSys"
-Runner = require "./RobustaTest/Runner"
+Runner = require "./FuellTest/Runner"
 
 
 settings = do ->
