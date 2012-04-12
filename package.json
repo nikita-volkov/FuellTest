@@ -3,12 +3,18 @@
   "name": "RobustaTest",
   "description": "A robust testing library which simplifies testing features after implementation. Introduces simple testing model of asynchronous functions.",
   "keywords": ["testing", "library", "simple", "async", "robusta", "coffeescript"],
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": null,
   "repository": {
     "type": "git",
-    "url": null
+    "url": "http://github.com/nikita-volkov/RobustaTest"
   },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/nikita-volkov/RobustaTest/master/LICENSE"
+    }
+  ],
   "main": "lib/RobustaTest.js",
   "bin": {
     "robusta-test": "bin/robusta-test"
@@ -19,9 +25,9 @@
   "scripts": {
   },
   "dependencies": {
-    "Fuell": "0.1.3",
-    "FuellSys": "0.1.1",
-    "coffee-script": ">=1.2.0"
+    "Fuell": "0.2.x",
+    "FuellSys": "0.1.x",
+    "coffee-script": ">1.2.0"
   },
   "devDependencies": {
   }
