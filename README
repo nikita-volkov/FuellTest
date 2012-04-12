@@ -1,0 +1,36 @@
+FuellTest
+
+A testing library for CoffeeScript/JavaScript projects. 
+
+Makes writing tests simple. Does not fall into the trend of verbosely describing every detail of your test as most modern testing frameworks do, instead it relies on self-describing assertion function names which themselves produce meaningful messages.
+
+As fast as possible. Runs all your tests parallelly.
+
+Supports testing of asynchronous functions with callbacks.
+
+Here's how the contents of a sample file may look like:
+  
+  exports.tests = 
+    "a failing 'a, b' test": ->
+      @equals "a", "b"
+    "a failing test with some successfull assertions": ->
+      @equals 1, 1
+      @equals 2, 1
+
+Or like so if it's JavaScript you're using:
+
+  exports.tests = {
+    "a failing 'a, b' test": function() {
+      this.equals "a", "b"
+    },
+    "a failing test with some successfull assertions": function() {
+      this.equals 1, 1
+      this.equals 2, 1
+    }
+  };
+
+To run your suites execute either of the following commands from the root of your project:
+  `fuell-test` - if your tests are located in the `test` folder
+  `fuell-test path/to/test/folder/` - otherwise
+
+To see the colored output add a `--pretty` or `-p` parameter if your console supports it.

@@ -16,4 +16,3 @@ exports[k] = v for k, v of {
       console.log HarnessSummary.text format, name, summary
       cb?()
   # multisuiteSummaryText  : HarnessSummary.text
-}
