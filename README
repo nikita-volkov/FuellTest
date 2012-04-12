@@ -1,6 +1,6 @@
 FuellTest
 
-A testing library for CoffeeScript/JavaScript projects. 
+A robust testing library for CoffeeScript/JavaScript which simplifies testing features after implementation and introduces simple testing model of asynchronous functions.
 
 Makes writing tests simple. Does not fall into the trend of verbosely describing every detail of your test as most modern testing frameworks do, instead it relies on self-describing assertion function names which themselves produce meaningful messages.
 
